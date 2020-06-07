@@ -7,8 +7,8 @@ import tensorflow as tf
 from keras.layers import Input, Lambda, Dense, Flatten
 from keras.layers import Dropout, Conv2D, MaxPool2D, GlobalAveragePooling2D
 from keras.models import Model
-from keras.applications.resnet50 import ResNet50
-from keras.applications.resnet50 import preprocess_input
+from keras.applications.vgg16 import VGG16
+from keras.applications.vgg16 import preprocess_input
 from keras.preprocessing import image
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
@@ -220,22 +220,22 @@ class mosselas5_CACF:
         valid_path = 'test_folder'
 
         # add preprocessing layer to the front of VGG
-        resnet = ResNet50(input_shape=IMAGE_SIZE + [3], weights='imagenet', include_top=False)
+        vgg = VGG16(input_shape=IMAGE_SIZE + [3], weights='imagenet', include_top=False)
 
         # don't train existing weights
-        for layer in resnet.layers:
+        for layer in vgg.layers:
             layer.trainable = False
         # useful for getting number of classes
         folders = glob('train_folder/*')
         # our layers - you can add more if you want
         #x = Flatten()(incep.output)
-        x=resnet.output
+        x=vgg.output
         x= GlobalAveragePooling2D()(x)
         x = Dense(1000, activation='relu')(x)
         #x = Dropout(0.7)(x)
         prediction = Dense(len(folders), activation='softmax')(x)
         # create a model object
-        model = Model(inputs=resnet.input, outputs=prediction)
+        model = Model(inputs=vgg.input, outputs=prediction)
         # view the structure of the model
         model.summary()
         # tell the model what cost and optimization method to use

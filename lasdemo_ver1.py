@@ -19,7 +19,7 @@ if __name__ == '__main__':
     iou_of_each_dataset = []
     for available_datasets in range(0,total_number_of_datasets):
         dataset = all_dataset[available_datasets]
-        dataset1 = 'Biker'
+        dataset1 = 'Car1'
         img_path = 'datasets/'+ dataset1  
         tracker = mosselas5_CACF(args, img_path, dataset1)
         val = tracker.start_tracking()
